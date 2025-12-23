@@ -3,7 +3,7 @@ version: '3.8'
 services:
   web:
     build: .
-    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 4
+    command: sh -c "cd src && gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 4"
     volumes:
       - ./src:/app/src
       - static_volume:/app/staticfiles
@@ -21,7 +21,7 @@ services:
 
   worker:
     build: .
-    command: celery -A config worker --loglevel=info --concurrency=4
+    command: sh -c "cd src && celery -A config worker --loglevel=info --concurrency=4"
     volumes:
       - ./src:/app/src
     env_file:
@@ -35,7 +35,7 @@ services:
 
   flower:
     build: .
-    command: celery -A config flower --port=5555
+    command: sh -c "cd src && celery -A config flower --port=5555"
     volumes:
       - ./src:/app/src
     ports:
@@ -60,7 +60,7 @@ services:
     restart: unless-stopped
 
   redis:
-    image: redis/redis-stack-server:latest
+    image: redis/redis-stack:latest
     ports:
       - "6379:6379"
       - "8001:8001"
