@@ -60,7 +60,7 @@ async def inference(request: InferenceRequest):
         # For now, it expects Ollama running on the host
         async with httpx.AsyncClient(timeout=30.0) as client:
             response = await client.post(
-                "http://host.docker.internal:11434/api/generate",
+                "http://localhost:11434/api/generate",
                 json={
                     "model": request.model,
                     "prompt": request.prompt,
